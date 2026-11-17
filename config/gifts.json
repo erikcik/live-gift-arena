@@ -1,0 +1,31 @@
+{
+  "joinKeyword": "halay",
+  "maxDancers": 28,
+  "gifts": {
+    "Rose": { "tr": "Gül", "emoji": "🌹", "coins": 1, "action": "mendil", "effect": "mendil" },
+    "Finger Heart": { "tr": "Parmak Kalp", "emoji": "🫰", "coins": 5, "action": "costume", "effect": "yöresel kıyafet" },
+    "Perfume": { "tr": "Parfüm", "emoji": "🧴", "coins": 20, "action": "fireworks_small", "effect": "havai fişek" },
+    "Doughnut": { "tr": "Donut", "emoji": "🍩", "coins": 30, "action": "davulcu", "effect": "davulcu" },
+    "Hand Heart": { "tr": "El Kalbi", "emoji": "🫶", "coins": 100, "action": "fireworks", "effect": "havai fişek" },
+    "Galaxy": { "tr": "Galaksi", "emoji": "🌌", "coins": 1000, "action": "leader", "effect": "halay başı" },
+    "Lion": { "tr": "Aslan", "emoji": "🦁", "coins": 29999, "action": "sikistir", "effect": "SIKIŞTIR!" },
+    "Universe": { "tr": "Evren", "emoji": "🪐", "coins": 44999, "action": "sikistir", "effect": "SIKIŞTIR!" }
+  },
+  "fallback": [
+    { "minCoins": 1000, "action": "leader" },
+    { "minCoins": 100, "action": "fireworks" },
+    { "minCoins": 0, "action": "sparkle" }
+  ],
+  "leaderMinCoins": 1000,
+  "legend": [
+    ["💬", "“halay”", "katıl"],
+    ["🌹", "Gül", "mendil"],
+    ["🫰", "Parmak Kalp", "kıyafet"],
+    ["🍩", "Donut", "davulcu"],
+    ["🫶", "El Kalbi", "havai fişek"],
+    ["🌌", "Galaksi", "halay başı"],
+    ["🦁", "Aslan", "SIKIŞTIR!"]
+  ],
+  "tempo": { "baseBpm": 102, "maxBpm": 128, "likesForMax": 700, "halfLifeSec": 14 },
+  "squeezeSeconds": 6.5
+}

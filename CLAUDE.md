@@ -99,4 +99,13 @@ built, previewed and demoed with no TikTok account.
 
 ## Commands
 
-(Fill this in as the project takes shape: install, dev, simulator, connect-to-live, record-demo.)
+```bash
+npm install
+npm run dev                      # scene at http://localhost:5173 (?sim=1 random viewers, ?demo=1 scripted demo, keys j/1-8/l/s/f)
+node tools/make-demo-timeline.mjs   # rewrite sim/demo-timeline.json after editing the script
+npm run demo:stills -- 5,30,55   # render stills at those seconds to out/
+npm run demo:render              # full showcase video → out/live-gift-arena-demo.mp4 (Chrome + ffmpeg + python numpy/scipy)
+```
+
+State so far (2026-11-17): the halay scene, simulator and demo renderer exist. Still to do: the TikTok LIVE bridge
+(`server/`), the Turkish host guide, and the host camera layout in OBS / LIVE Studio.

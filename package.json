@@ -1,0 +1,20 @@
+{
+  "name": "live-gift-arena",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "AGPL-3.0-only",
+  "scripts": {
+    "dev": "vite --config scene/vite.config.js",
+    "build": "vite build --config scene/vite.config.js",
+    "demo:render": "node tools/render-demo.mjs",
+    "demo:stills": "node tools/render-demo.mjs --stills"
+  },
+  "dependencies": {
+    "three": "^0.187.0"
+  },
+  "devDependencies": {
+    "playwright-core": "^1.65.1",
+    "vite": "^7.1.0"
+  }
+}
