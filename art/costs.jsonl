@@ -1,0 +1,13 @@
+{"file": "art/raw/warrior_orange.png", "model": "openai/gpt-image-2/text-to-image", "cost": 0.057, "secs": 53}
+{"file": "art/raw/dragon.png", "model": "openai/gpt-image-2/edit", "cost": 0.0665, "secs": 43}
+{"file": "art/raw/castle_orange.png", "model": "openai/gpt-image-2/edit", "cost": 0.1995, "secs": 52}
+{"file": "art/raw/elephant_orange.png", "model": "openai/gpt-image-2/edit", "cost": 0.133, "secs": 52}
+{"file": "art/raw/archer_orange.png", "model": "openai/gpt-image-2/edit", "cost": 0.399, "secs": 58}
+{"file": "art/raw/knight_orange.png", "model": "openai/gpt-image-2/edit", "cost": 0.399, "secs": 70}
+{"file": "art/raw/warrior_blue.png", "model": "openai/gpt-image-2/edit", "cost": 0.399, "secs": 80}
+{"file": "art/raw/background.png", "model": "openai/gpt-image-2/text-to-image", "cost": 0.608, "secs": 127}
+{"file": "art/raw/castle_blue.png", "model": "openai/gpt-image-2/edit", "cost": 0.2337, "secs": 48}
+{"file": "art/raw/knight_blue.png", "model": "openai/gpt-image-2/edit", "cost": 0.0779, "secs": 54}
+{"file": "art/raw/eagle_blue.png", "model": "openai/gpt-image-2/edit", "cost": 0.7011, "secs": 56}
+{"file": "art/raw/archer_blue.png", "model": "openai/gpt-image-2/edit", "cost": 0.2337, "secs": 57}
+{"file": "art/raw/background.png", "model": "openai/gpt-image-2/edit", "cost": 0.6346, "secs": 89}

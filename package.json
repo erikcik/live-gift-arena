@@ -10,11 +10,12 @@
     "demo:render": "node tools/render-demo.mjs",
     "demo:stills": "node tools/render-demo.mjs --stills"
   },
-  "dependencies": {
-    "three": "^0.187.0"
-  },
   "devDependencies": {
     "playwright-core": "^1.65.1",
     "vite": "^7.1.0"
+  },
+  "dependencies": {
+    "pixi-filters": "^6.1.5",
+    "pixi.js": "^8.23.0"
   }
 }

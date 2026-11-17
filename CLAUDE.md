@@ -1,111 +1,95 @@
-# CLAUDE.md: live-gift-arena
+# CLAUDE.md: live-gift-arena (GIFT WAR)
 
-Gift-reactive scenes for TikTok LIVE. Viewers comment, like and send gifts, and an animated scene on the stream
-reacts in real time. Scene 1 is a Turkish **halay**: every viewer can join the line, gifts upgrade them, and big
-gifts set off group-wide moments.
+A team war for TikTok LIVE, driven by viewers. Comment `1` or `2` to pick a side, and every gift spawns a unit
+carrying the gifter's username. Each side has its own gift goal that unleashes an ultimate, and the first castle to
+fall loses. This is the partner's concept: faction battles where gifts fire animations and usernames appear on the
+field, built for large audiences.
 
-Read `docs/research.md` before designing anything. It holds the trend, the competitors, the event libraries,
-TikTok's rules and the money math, all with sources.
+Read `docs/research.md` before changing the design. It holds the trend, the event libraries, TikTok's rules and the
+money math, all with sources.
 
 ## Who does what
 
 - **This repo** is built by Claude Code sessions. It is public on GitHub, so write it so anyone can clone it, read it
   and run it.
 - **The host** is a partner in Turkey who owns the TikTok account, presents on camera or mic, and runs the stream from
-  his computer (OBS or TikTok LIVE Studio). His OS isn't known yet, so support macOS and Windows.
-- **Never use the repo owner's phones or social accounts** for this project. They are busy with other work. Nothing
-  here signs in to TikTok or posts anything. The library only *reads* LIVE events.
+  his computer (OBS or TikTok LIVE Studio). Support macOS and Windows.
+- **Never use the repo owner's phones or social accounts** for this project. Nothing here signs in to TikTok or posts
+  anything. The event library only *reads* LIVE events.
 
-## Deliverables (definition of done)
+## Where it stands (2026-11-17)
 
-1. **A working halay scene**, 1080×1920 vertical, that reacts to live events. The host must be able to run it
-   from the README alone.
-2. **An event pipeline** that has been tested against a *real* public TikTok LIVE in read-only mode: connect to
-   someone else's live and drive our scene with their real gifts, likes and chat. This proves the pipeline end to
-   end before the host's account exists.
-3. **An end-to-end demo video** (vertical, 60–120 s) of what our live will look like:
-   - quiet idle
-   - viewers joining from chat
-   - Rose joins, upgrades, the leader takeover, a big-gift spectacle
-   - the leaderboard
-   - the host's camera bubble (a placeholder is fine)
-   Recorded from the real scene, never mocked up.
-4. **A host setup guide in Turkish** (`docs/host-guide.tr.md`):
-   - install, the Euler Stream key, OBS or LIVE Studio setup
-   - layout, going live
-   - the dos and don'ts from the policy section below
-5. **The public GitHub repo** with a README (English and Turkish), screenshots or GIFs, and the demo video linked.
+**Done:**
+- The battle scene, in PixiJS with an illustrated art set.
+- The canvas HUD, the simulator and live keys.
+- The demo renderer and soundtrack synth.
+- Demo video v2 (release `demo-v2`).
 
-## Architecture (starting point; change it if something is clearly better, and say why)
+The art and HUD went through two clean-context art-director reviews.
+
+**Next:**
+1. **TikTok LIVE bridge** (`server/`): TikTok-Live-Connector with an Euler Stream key from `.env`, plus a TikFinity
+   WebSocket adapter for Windows.
+   - It normalises events to `{type, user, gift, count, text, team}` and handles gift streaks (apply once per streak,
+     dedupe).
+   - It broadcasts to the scene's `?ws=` input.
+   - Prove it read-only against a busy public LIVE.
+2. **Turkish host guide** (`docs/host-guide.tr.md`): setup, OBS / LIVE Studio at 1080×1920, the host camera over the
+   `HOST CAM` slot, and the dos and don'ts below.
+3. **Team presets.** TikTok has been banned in India since 2020, so the India side only reaches the diaspora. Make
+   teams switchable from `config/battle.json` without code: names, flags, colours, art and ultimate.
+
+## Architecture
 
 ```
-server/   Node + TypeScript.
-          Event sources behind one interface:
-            - TikTok-Live-Connector (Euler Stream key from .env)
-            - TikFinity WebSocket (ws://localhost:21213, Windows hosts)
-            - a simulator
-          It normalises events, handles gift streaks (apply once per streak or per increment, dedupe),
-          rate-limits per viewer, maps gifts to actions from a JSON config, and broadcasts to the scene over a
-          local WebSocket. It also serves an operator panel: fire test events, tweak mappings live, pause or reset.
-scene/    The web page the stream shows (Vite + Three.js, or PixiJS if 2D looks better).
-          It is an OBS Browser Source / LIVE Studio web source at 1080×1920.
-config/   Gift → action mappings and scene settings (JSON). The host tunes these without touching code.
+scene/src/battle.js    simulation: units, formation rows, combat, projectiles, flyers (dragon, eagle, elephant),
+                       the big-moment director (one major at a time), castle damage, collapse, directed kill shot.
+                       Two clocks: `clock` (real seconds, drives events, logs and the camera) and `time` (sim,
+                       slowed during the kill shot).
+scene/src/fx.js        pooled sprite particles and presets (explosion, hit, summon, poof, fire, embers)
+scene/src/hud.js       canvas HUD: team panels (castle HP + gift goal), host cam slot, gift feed, rotating gift card,
+                       top gifters, name tags (feet labels + plates), hero plates, banners, victory, end card
+scene/src/main.js      boot, Pixi filters (grade, shockwaves, bloom), deterministic render API, live loop, ?sim / ?ws
+config/battle.json     teams, gifts → actions, unit stats, goals, legend
+sim/demo-timeline.json the demo session (made by tools/make-demo-timeline.mjs)
+tools/render-demo.mjs  headless Chrome → frames → ffmpeg; writes out/demo-log.json for the synth
+tools/audio/synth.py   music and effects from the log
+tools/art/             ws.py (WaveSpeed client, logs cost to art/costs.jsonl), prepare.py (raw → game assets)
 ```
 
-**Simulator first.** Every feature must be triggerable from the simulator and the operator panel, so the scene can be
-built, previewed and demoed with no TikTok account.
-
-## Halay scene v1: default mappings (from what competitors use; tune after testing)
-
-| Trigger | Effect |
-| --- | --- |
-| Idle | A small group of villager NPCs keeps dancing slowly. The screen is never empty or frozen. |
-| Chat `halay` (any case, once per viewer) | A plain dancer with the viewer's name joins the line. |
-| Rose | Joins (or upgrades) with a coloured mendil and a name highlight. |
-| Mid gifts (Finger Heart, Donut, Perfume, Hand Heart) | Costume upgrades (regional outfits, gold embroidery), the davul or kemençe player, fireworks. |
-| Big gift (e.g. Galaxy and up) | Becomes **halay başı** (leader at the head of the line, waving the mendil) until outbid. |
-| Huge gifts (Lion, Universe) | **"SIKIŞTIR!"**: the line squeezes together, a zurna solo, giant fireworks, a name banner. |
-| Likes | Tempo meter: more likes, faster halay. |
-| Follow / share | A small banner or confetti. |
-| Always on | Top-5 board ("Halay Ustaları"), combo counters ("x5"), chat bubbles over dancers. |
-
-**Look and feel matter most.** Paid halay games already exist. Ours has to look and sound better:
-- characters with real halay footwork and shoulder movement, linked by the little finger
-- a village square or wedding setting
-- warm light
-- davul-zurna audio
+**Art.**
+- New art is generated with `openai/gpt-image-2/edit`, passing an existing sprite (e.g. `art/raw/warrior_orange.png`)
+  as the style reference so the set stays consistent.
+- Ask for "isolated on a fully transparent background".
+- Use `aspect_ratio`, not `size`.
+- Costs about $0.06–0.2 an image. The key comes from the environment and is never committed.
 
 ## Rules
 
-- **Host presence.** The layout always has room for the host's camera and assumes a host is talking to viewers.
-  TikTok demonetizes streams "operated primarily through automated systems without meaningful creator presence".
-- **No gift begging.** No looping "send gifts" text, no rewards that are only a transaction, and no pressure tactics.
-  On-screen copy describes what gifts *do*, once, calmly.
-- **No real gangs** (no Bloods vs Crips), **no religious or ethnic conflict, no religious rituals or funerals** as
-  scenes. Those risk an account ban and are already drawing press and prosecutor attention in Turkey. Team formats
-  use playful sides (colours, villages, cities as fun), never factions.
-- **No gambling mechanics.** No paid spins, random reward draws or raffles.
+- **Host presence.** The layout keeps the `HOST CAM` slot. TikTok demonetizes streams "operated primarily through
+  automated systems without meaningful creator presence".
+- **No gift begging.** On-screen copy says what gifts *do*, once, calmly. No looping "send gifts".
+- **No real gangs** (no Bloods vs Crips) and **no religious or ethnic conflict**. Those risk an account ban.
+  - Nations appear as playful, stylised team skins (fantasy legions with flags), the way country battles run on TikTok.
+  - Never hateful, never about real wars.
+- **No gambling mechanics.** No paid spins, random rewards or raffles.
+- **Big moments go through the director**, one at a time, each one showing its hero and the gifter's name.
 - **Licences.**
-  - TikTok-Live-Connector is AGPL-3.0, so license this repo AGPL-3.0.
-  - Use only CC0 or clearly licensed 3D, 2D and audio assets (e.g. Quaternius, KayKit, Kenney, or our own), and list
-    each one with its licence in `ASSETS.md`.
-  - Don't commit TikTok's gift images; load them from the event payload at runtime.
-  - Music must be ours or royalty-free, because TikTok mutes copyrighted audio on LIVE.
-- **Secrets.** The Euler Stream key and any tokens go in `.env` (git-ignored), with `.env.example` committed.
-  Scan the diff before every push.
-- **Public repo hygiene.** No personal names beyond first names, no machine-local paths, no phone numbers.
-- **Git.** Commit at coherent checkpoints and push to `main` (stage explicit paths, never `git add -A`, never
-  force-push).
+  - The repo is AGPL-3.0 (TikTok-Live-Connector is AGPL).
+  - List every asset in `ASSETS.md`.
+  - No TikTok gift images in the repo.
+  - Audio stays synthesised or royalty-free.
+- **Secrets** go in `.env` (git-ignored). Scan the diff before every push.
+- **Public repo hygiene.** First names only, no machine-local paths.
+- **Git.** Commit at checkpoints and push to `main`. Stage explicit paths and never force-push.
 
 ## Commands
 
 ```bash
 npm install
-npm run dev                      # scene at http://localhost:5173 (?sim=1 random viewers, ?demo=1 scripted demo, keys j/1-8/l/s/f)
-node tools/make-demo-timeline.mjs   # rewrite sim/demo-timeline.json after editing the script
-npm run demo:stills -- 5,30,55   # render stills at those seconds to out/
-npm run demo:render              # full showcase video → out/live-gift-arena-demo.mp4 (Chrome + ffmpeg + python numpy/scipy)
+npm run dev                         # http://localhost:5173 (?sim=1, ?demo=1, ?ws=…; keys j / 1-6 / l, Shift = team 2)
+node tools/make-demo-timeline.mjs   # after editing the demo script
+npm run demo:stills -- 5,20,40      # stills at those seconds → out/
+npm run demo:render                 # full video → out/live-gift-arena-demo.mp4 (about 45 s on an M-series Mac)
+python3 tools/art/prepare.py        # after adding or regenerating art in art/raw/
 ```
-
-State so far (2026-11-17): the halay scene, simulator and demo renderer exist. Still to do: the TikTok LIVE bridge
-(`server/`), the Turkish host guide, and the host camera layout in OBS / LIVE Studio.

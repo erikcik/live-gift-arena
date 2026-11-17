@@ -1,80 +1,60 @@
 // Writes sim/demo-timeline.json: the scripted viewer session behind the showcase video.
-// Every event goes through the same Game.handle() as live TikTok events.
+// Every event goes through the same Battle.handle() as live TikTok events; times are in real seconds.
 import { writeFileSync } from 'node:fs';
 
 const ev = [];
+const T = { usa: 0, india: 1 };
 const chat = (t, user, text) => ev.push({ t, type: 'chat', user, text });
-const gift = (t, user, g, count = 1) => ev.push({ t, type: 'gift', user, gift: g, count });
-const caption = (t, text, dur = 4.6) => ev.push({ t, type: 'caption', text, dur });
-const likes = (t0, t1, perSec, users) => {
-  let i = 0;
-  for (let t = t0; t < t1; t += 0.3) ev.push({ t: +t.toFixed(2), type: 'like', user: users[i++ % users.length], count: Math.round(perSec * 0.3) });
-};
+const gift = (t, user, team, g, count = 1) => ev.push({ t, type: 'gift', user, team: T[team], gift: g, count });
+const likes = (t0, t1, user, team, perSec) => { for (let t = t0; t < t1; t += 0.4) ev.push({ t: +t.toFixed(2), type: 'like', user, team: T[team], count: Math.round(perSec * 0.4) }); };
+const caption = (t, text, dur = 3.0) => ev.push({ t, type: 'caption', text, dur });
 
-caption(0.6, 'kimse yokken köylüler halayı çekiyor', 3.6);
+// Cold open: the armies are already fighting when a dragon arrives.
+ev.push({ t: 0, type: 'prewarm', users: [['jake_tx', 0], ['priya.s', 1], ['mike.d', 0], ['arjun07', 1], ['emily_r', 0], ['rohan.k', 1], ['chris_b', 0], ['ananya__', 1], ['kayla.m', 0], ['sneha.r', 1]], kind: ['warrior', 'warrior', 'archer', 'warrior', 'warrior', 'archer', 'knight', 'warrior', 'warrior', 'knight'] });
+gift(0.05, 'tyler99', 'usa', 'Galaxy');
+ev.push({ t: 1.9, type: 'logo' });
 
-caption(4.2, 'yoruma “halay” yazan halaya katılır');
-chat(4.4, 'ayse.k', 'halay');
-chat(5.3, 'mehmet_34', 'HALAY');
-chat(6.1, 'zeynep.dnz', 'halay halay 💃');
-chat(6.8, 'burak.gs', 'halay');
-chat(7.5, 'elif.yldz', 'halayy');
-chat(8.2, 'emre_can', 'halay');
-chat(8.8, 'selin.ak', 'halay 🔥');
-chat(9.5, 'kerem_06', 'halay');
-chat(10.1, 'derya.m', 'halay');
-chat(11.4, 'ayse.k', 'davul çok iyi 😍');
+caption(3.7, 'Comment 1 or 2 to pick a side', 3.0);
+[['eray', '1'], ['muhlis', '2'], ['nick_ny', '1'], ['dev.patel', '2'], ['sam.w', '1'], ['aarav.k', '2'], ['ben.c', '1'], ['isha_m', '2']].forEach(([u, s], i) => chat(+(3.8 + i * 0.33).toFixed(2), u, s));
 
-caption(12.6, '🌹 Gül → kırmızı mendil');
-gift(12.8, 'oguzhan.tr', 'Rose');
-gift(13.9, 'mehmet_34', 'Rose', 5);
-gift(15.0, 'hatice_44', 'Rose');
-chat(16.2, 'burak.gs', 'oha mendil 😂');
+caption(6.9, '🌹 Rose = Warrior   🫰 Finger Heart = Archer', 3.0);
+gift(7.0, 'jake_tx', 'usa', 'Rose', 3);
+gift(7.5, 'priya.s', 'india', 'Rose', 3);
+gift(8.1, 'mike.d', 'usa', 'Finger Heart', 2);
+gift(8.6, 'arjun07', 'india', 'Finger Heart', 2);
+gift(9.2, 'nick_ny', 'usa', 'Rose', 2);
 
-caption(17.4, '❤️ beğeniler davulu hızlandırır');
-likes(17.5, 27, 85, ['ayse.k', 'kerem_06', 'derya.m', 'cem.krt', 'nazli.s', 'elif.yldz']);
-ev.push({ t: 19.6, type: 'follow', user: 'cem.krt' });
-ev.push({ t: 21.0, type: 'share', user: 'nazli.s' });
+caption(10.0, '❤️ Likes = arrow rain', 2.7);
+likes(10.0, 12.4, 'kayla.m', 'usa', 140);
+likes(10.3, 12.6, 'isha_m', 'india', 140);
 
-caption(22.4, '🫰 Parmak Kalp → yöresel kıyafet');
-gift(22.6, 'zeynep.dnz', 'Finger Heart');
-gift(23.8, 'selin.ak', 'Finger Heart', 3);
+caption(12.8, '🍩 Doughnut = Knight', 3.0);
+gift(12.9, 'sam.w', 'usa', 'Doughnut');
+gift(13.5, 'aarav.k', 'india', 'Doughnut', 2);
+gift(14.2, 'ben.c', 'usa', 'Doughnut');
+gift(14.8, 'ananya__', 'india', 'Rose', 4);
 
-caption(26.0, '🍩 Donut → davulun başına geçer');
-gift(26.2, 'umut.bey', 'Doughnut');
+caption(15.9, '🫶 Hand Heart = Catapult strike', 3.0);
+gift(16.0, 'rohan.k', 'india', 'Hand Heart');
+gift(17.1, 'emily_r', 'usa', 'Hand Heart');
 
-caption(29.6, '🧴 🫶 → havai fişek');
-gift(29.8, 'ipek_', 'Perfume');
-gift(31.0, 'tolga.ist', 'Hand Heart');
-chat(32.6, 'kerem_06', 'halay başı kim olacak 👀');
+caption(18.9, '🌌 Galaxy = Dragon, with the gifter’s name on it', 3.2);
+gift(19.2, 'muhlis', 'india', 'Galaxy');
+gift(20.6, 'chris_b', 'usa', 'Rose', 3);
+gift(21.4, 'dev.patel', 'india', 'Rose', 3);
 
-caption(34.0, '🌌 Galaksi → yeni halay başı');
-gift(34.2, 'muhlis', 'Galaxy');
-chat(37.6, 'muhlis', 'çekin halayı 💪');
-chat(38.8, 'derya.m', 'muhlis abi 🔥');
-likes(36, 44, 50, ['selin.ak', 'emre_can', 'burak.gs']);
-gift(40.2, 'ayse.k', 'Rose', 10);
-gift(41.4, 'elif.yldz', 'Finger Heart');
+gift(22.2, 'kayla.m', 'usa', 'Hand Heart', 4);
+caption(24.6, 'USA fills its gift goal → EAGLE STRIKE', 3.0);
+gift(25.6, 'priya.s', 'india', 'Doughnut', 3);
+gift(26.4, 'sneha.r', 'india', 'Hand Heart', 3);
+gift(27.0, 'dev.patel', 'india', 'Hand Heart', 2);
+likes(27.0, 29.0, 'eray', 'usa', 100);
+caption(29.7, 'India fills its goal → ELEPHANT STAMPEDE', 3.0);
 
-caption(44.2, 'başka biri Galaksi atınca başlık el değiştirir');
-gift(44.4, 'eray', 'Galaxy');
-chat(47.6, 'eray', 'başlık bende 😎');
-chat(48.8, 'muhlis', 'görürsün 😤');
+caption(34.4, '🪐 Universe = METEOR STORM', 3.2);
+gift(34.6, 'muhlis', 'india', 'Universe');
 
-caption(51.2, '🪐 Evren / 🦁 Aslan → SIKIŞTIR!', 5);
-gift(51.4, 'muhlis', 'Universe');
-likes(52, 60, 90, ['ayse.k', 'kerem_06', 'derya.m', 'cem.krt', 'zeynep.dnz']);
-chat(59.4, 'zeynep.dnz', 'SIKIŞTIR 😭😭');
-chat(60.4, 'mehmet_34', 'efsane');
-gift(61.4, 'hatice_44', 'Rose', 3);
-gift(62.4, 'kerem_06', 'Perfume');
-
-caption(64.0, '🏆 en çok gönderenler: Halay Ustaları', 4.5);
-chat(65.4, 'selin.ak', 'yarın da açın 🙏');
-gift(66.4, 'derya.m', 'Finger Heart');
-
-ev.push({ t: 70.5, type: 'endcard' });
-
+ev.push({ t: 48.6, type: 'endcard' });
 ev.sort((a, b) => a.t - b.t);
-writeFileSync(new URL('../sim/demo-timeline.json', import.meta.url), JSON.stringify({ duration: 76, events: ev }, null, 1) + '\n');
+writeFileSync(new URL('../sim/demo-timeline.json', import.meta.url), JSON.stringify({ duration: 52.5, events: ev }, null, 1) + '\n');
 console.log(`wrote ${ev.length} events`);

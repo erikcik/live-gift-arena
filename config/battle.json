@@ -1,0 +1,194 @@
+{
+  "title": "GIFT WAR",
+  "teams": [
+    {
+      "id": "usa",
+      "name": "USA",
+      "legion": "Azure Star Legion",
+      "flag": "us",
+      "color": "#2f6bff",
+      "light": "#8fb4ff",
+      "dark": "#0b1d55",
+      "join": [
+        "1",
+        "usa",
+        "america",
+        "🇺🇸"
+      ],
+      "art": {
+        "warrior": "warrior_blue",
+        "archer": "archer_blue",
+        "knight": "knight_blue",
+        "dragon": "dragon_blue",
+        "castle": "castle_blue"
+      },
+      "ultimate": {
+        "name": "EAGLE STRIKE",
+        "kind": "eagles",
+        "goal": 1500
+      }
+    },
+    {
+      "id": "india",
+      "name": "INDIA",
+      "legion": "Saffron Tiger Legion",
+      "flag": "in",
+      "color": "#ff8a1f",
+      "light": "#ffc27a",
+      "dark": "#5a2400",
+      "join": [
+        "2",
+        "india",
+        "bharat",
+        "🇮🇳"
+      ],
+      "art": {
+        "warrior": "warrior_orange",
+        "archer": "archer_orange",
+        "knight": "knight_orange",
+        "dragon": "dragon_orange",
+        "castle": "castle_orange"
+      },
+      "ultimate": {
+        "name": "ELEPHANT STAMPEDE",
+        "kind": "elephants",
+        "goal": 1500
+      }
+    }
+  ],
+  "gifts": {
+    "Rose": {
+      "coins": 1,
+      "action": "warrior",
+      "label": "Warrior",
+      "emoji": "🌹"
+    },
+    "Finger Heart": {
+      "coins": 5,
+      "action": "archer",
+      "label": "Archer",
+      "emoji": "🫰"
+    },
+    "Doughnut": {
+      "coins": 30,
+      "action": "knight",
+      "label": "Knight",
+      "emoji": "🍩"
+    },
+    "Hand Heart": {
+      "coins": 100,
+      "action": "catapult",
+      "label": "Catapult strike",
+      "emoji": "🫶"
+    },
+    "Galaxy": {
+      "coins": 1000,
+      "action": "dragon",
+      "label": "Dragon",
+      "emoji": "💫"
+    },
+    "Lion": {
+      "coins": 29999,
+      "action": "meteor",
+      "label": "Meteor storm",
+      "emoji": "🦁"
+    },
+    "Universe": {
+      "coins": 44999,
+      "action": "meteor",
+      "label": "Meteor storm",
+      "emoji": "🪐"
+    }
+  },
+  "fallback": [
+    {
+      "minCoins": 1000,
+      "action": "dragon"
+    },
+    {
+      "minCoins": 100,
+      "action": "catapult"
+    },
+    {
+      "minCoins": 30,
+      "action": "knight"
+    },
+    {
+      "minCoins": 5,
+      "action": "archer"
+    },
+    {
+      "minCoins": 0,
+      "action": "warrior"
+    }
+  ],
+  "units": {
+    "warrior": {
+      "hp": 120,
+      "dmg": 16,
+      "range": 46,
+      "speed": 58,
+      "cooldown": 0.85,
+      "height": 180
+    },
+    "archer": {
+      "hp": 70,
+      "dmg": 11,
+      "range": 300,
+      "speed": 48,
+      "cooldown": 1.1,
+      "height": 180
+    },
+    "knight": {
+      "hp": 340,
+      "dmg": 30,
+      "range": 58,
+      "speed": 92,
+      "cooldown": 0.9,
+      "height": 168
+    },
+    "recruit": {
+      "hp": 80,
+      "dmg": 10,
+      "range": 44,
+      "speed": 55,
+      "cooldown": 0.95,
+      "height": 160
+    }
+  },
+  "castleHp": 5000,
+  "likesPerVolley": 150,
+  "maxUnitsPerTeam": 26,
+  "legend": [
+    [
+      "🌹",
+      "Rose",
+      "warrior"
+    ],
+    [
+      "🫰",
+      "F.Heart",
+      "archer"
+    ],
+    [
+      "🍩",
+      "Donut",
+      "knight"
+    ],
+    [
+      "🫶",
+      "H.Heart",
+      "catapult"
+    ],
+    [
+      "💫",
+      "Galaxy",
+      "dragon"
+    ],
+    [
+      "🪐",
+      "Universe",
+      "meteor"
+    ]
+  ]
+}

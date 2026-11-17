@@ -15,7 +15,7 @@ const OUT = ROOT + 'out/';
 const FPS = 30;
 mkdirSync(OUT, { recursive: true });
 
-const stillsArg = process.argv.includes('--stills') ? process.argv[process.argv.indexOf('--stills') + 1] || '3,10,25,36,54,72' : null;
+const stillsArg = process.argv.includes('--stills') ? process.argv[process.argv.indexOf('--stills') + 1] || '4,12,20,28,34,42,53,60' : null;
 const limit = process.argv.includes('--seconds') ? +process.argv[process.argv.indexOf('--seconds') + 1] : null;
 
 const server = await createServer({ configFile: ROOT + 'scene/vite.config.js', server: { port: 5199, strictPort: true }, logLevel: 'error' });
